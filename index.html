@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ Restauration – Lycée Jacquard</title>
+  <link rel="icon" href="./133_standalone_0.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --glass: rgba(255, 255, 255, 0.1);
+      --white: #fff;
+      --primary-color: #8b5cf6; /* Purple color for buttons and highlights */
+      --background-color: #2a2a2a; /* Dark background color */
+      --secondary-color: #e6e6e6; /* Light secondary text */
+      --chef-icon: url('https://img.icons8.com/ios/452/chef-hat.png'); /* Chef icon */
+      --menu-icon: url('https://img.icons8.com/ios/452/restaurant.png'); /* Menu icon */
+      --image-size: 40px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Josefin Sans', sans-serif;
+      overflow-x: hidden;
+      color: var(--white);
+    }
+
+    body {
+      position: relative;
+      background: linear-gradient(135deg, #1c1c1c, #2d2d2d); /* Black to dark grey gradient */
+      animation: gradientBackground 10s ease infinite; /* Smooth gradient animation */
+    }
+
+    @keyframes gradientBackground {
+      0% {
+        background: linear-gradient(135deg, #1c1c1c, #2d2d2d);
+      }
+      50% {
+        background: linear-gradient(135deg, #333333, #444444);
+      }
+      100% {
+        background: linear-gradient(135deg, #1c1c1c, #2d2d2d);
+      }
+    }
+
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      backdrop-filter: blur(6px);
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      animation: fadeDown 1s ease;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      font-weight: 400;
+      opacity: 0.9;
+      animation: fadeDown 1.2s ease;
+    }
+
+    @keyframes fadeDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .faq-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      display: grid;
+      gap: 2rem;
+    }
+
+    .faq {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+    }
+
+    .faq:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .faq h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      padding-left: 40px;
+      background-image: var(--menu-icon);
+      background-repeat: no-repeat;
+      background-size: 20px;
+      background-position: 10px center;
+    }
+
+    .faq h2::after {
+      content: '+';
+      font-size: 1.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .faq.active h2::after {
+      transform: rotate(45deg);
+    }
+
+    .faq p {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: all 0.5s ease;
+      margin-top: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .faq.active p {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .chef-answer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-left: 20px;
+      background-image: var(--chef-icon);
+      background-repeat: no-repeat;
+      background-size: 25px;
+      background-position: 10px center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.95rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+      margin-top: auto;
+    }
+
+    .suggestion-form {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 15px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .suggestion-form h2 {
+      margin-bottom: 0.3rem;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .suggestion-form p {
+      margin-bottom: 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .suggestion-form input,
+    .suggestion-form textarea {
+      width: 100%;
+      margin: 0.4rem 0;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      resize: vertical;
+      background: var(--background-color);
+      color: var(--white);
+    }
+
+    .suggestion-form button {
+      margin-top: 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .suggestion-form button:hover {
+      background-color: #45a049;
+    }
+
+    #formStatus {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .suggestion-form label input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #4caf50;
+    }
+
+    input[disabled] {
+      cursor: not-allowed;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-row input#prenom {
+      flex: 0 0 200px;
+      min-width: 150px;
+    }
+
+    .ou-label {
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .checkbox-inline {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    /* ✅ Petit style case à cocher */
+    .checkbox-inline input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #4caf50;
+    }
+
+    @keyframes fadeDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .checkbox-inline {
+        justify-content: flex-end;
+        padding-right: 0.3rem;
+        gap: 0.3rem; /* ✅ Réduit l'espace entre la case et le texte */
+        font-size: 0.9rem;
+      }
+    
+      .ou-label {
+        display: none; /* ✅ on l'affiche sur mobile */
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      .faq-container {
+        padding: 0 0.5rem;
+      }
+
+      .faq {
+        padding: 1rem 1.2rem;
+        border-radius: 15px;
+      }
+
+      .faq h2 {
+        font-size: 1.1rem;
+      }
+
+      .faq h2::after {
+        font-size: 1.5rem;
+      }
+
+      .faq p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+      }
+      
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fond animé -->
+  <div id="tsparticles"></div>
+
+  <header>
+    <h1>FAQ Restauration</h1>
+    <p>Enquête sur le fonctionnement du service de restauration au Lycée Jacquard</p>
+  </header>
+  <main class="faq-container">
+    <section class="enquete-info">
+        🔎 Cette enquête a été menée par <strong>Nohlan Chauvelot</strong> et <strong>WIlliam Bienaimé</strong>, à partir d’un entretien avec <strong>Mr Bret</strong>, chef de cuisine du lycée Jacquard.
+    </section>
+
+    <section class="suggestion-form">
+        <h2>💡 Une idée pour améliorer la restauration ?</h2>
+        <p>Tu peux proposer une amélioration !</p>
+        <form id="suggestionForm">
+          <div class="form-row align-center">
+            <input type="text" id="prenom" name="prenom" placeholder="Ton prénom">
+            <span class="ou-label">OU</span>
+            <label class="checkbox-inline">
+              <input type="checkbox" id="anonyme" name="anonyme">
+              Je souhaite rester anonyme
+            </label>
+          </div>
+          
+          <input type="text" id="classe" name="classe" placeholder="Ta classe (ex : 2nde 1)" required>
+          
+          <textarea id="suggestion" name="suggestion" placeholder="Ta suggestion..." required></textarea>
+          <button type="submit">Envoyer la suggestion</button>
+          <p id="formStatus"></p>
+        </form>
+    </section>
+
+    <div class="faq"><h2>🍽️ Comment planifiez-vous les menus pour la semaine ?</h2><p class="chef-answer">🧑‍🍳 En concertation avec l’équipe de cuisine et avec Mme l'intendante Mme Arpin, nous équilibrons les repas tout en respectant les saisons.</p></div>
+    <div class="faq"><h2>🌱 Quels critères utilisez-vous pour sélectionner les produits et les fournisseurs ?</h2><p class="chef-answer">🌱 Nous privilégions les produits locaux et de saison, en respectant les normes sanitaires et en négociant les meilleurs prix.</p></div>
+    <div class="faq"><h2>💵 Quel est le budget moyen alloué par repas et par élève ?</h2><p class="chef-answer">💵 Le budget moyen par repas est de 3,95 € par élève, couvrant les coûts alimentaires, mais pas les charges de personnel ni l'entretien.</p></div>
+    <div class="faq"><h2>✅ Quelles sont les principales règles d’hygiène et de sécurité alimentaire que vous devez respecter au quotidien ?</h2><p class="chef-answer">✅ Nous appliquons les règles HACCP, en contrôlant les températures, la traçabilité des aliments, et le nettoyage quotidien de la cuisine.</p></div>
+    <div class="faq"><h2>🍏 Comment gérez-vous les demandes spécifiques pour les élèves allergiques ou ayant un régime alimentaire particulier ?</h2><p class="chef-answer">🍏 Nous proposons des alternatives adaptées aux allergies et aux régimes alimentaires spécifiques, comme végétarien ou halal, sur présentation d'un certificat.</p></div>
+    <div class="faq"><h2>📊 Comment évaluez-vous la quantité de nourriture à préparer pour éviter le gaspillage alimentaire ?</h2><p class="chef-answer">📊 Nous basons les quantités sur les prévisions de fréquentation et ajustons en fonction des retours des services précédents.</p></div>
+    <div class="faq"><h2>🔧 Quelles sont les principales difficultés liées à la préparation et au service des repas pour un grand nombre d'élèves ?</h2><p class="chef-answer">🔧 Le principal défi est le timing : tout doit être prêt pour servir jusqu’à 400 élèves en un temps réduit.</p></div>
+    <div class="faq"><h2>🧑‍🍳 Combien de personnes travaillent en cuisine et comment vous organisez-vous pour assurer un service efficace ?</h2><p class="chef-answer">🧑‍🍳 Nous sommes 7 agents en tout. Chaque membre de l'équipe a un poste défini, et nous assurons une mise en place efficace.</p></div>
+    <div class="faq"><h2>🎤 Avez-vous des retours ou des suggestions de la part des élèves concernant les repas ?</h2><p class="chef-answer">🎤 Oui, nous recevons des retours via les délégués ou même via la boite a menus et ajustons les menus en conséquence.</p></div>
+    <div class="faq"><h2>💡 Quels changements ou améliorations pourraient être apportés pour améliorer la qualité des repas et les conditions de travail en cuisine ?</h2><p class="chef-answer">💡 L'agrandissement de la cantine et plus de produits bio améliorerait la qualité des repas.</p></div>
+  </main>
+
+  <footer>
+    © 2025 – Projet des étudiants du Lycée Jacquard | Enquête sur la restauration scolaire<br>💻 Site conçu par <strong>Nohlan Chauvelot</strong> et <strong>WIlliam Bienaimé</strong>.
+  </footer>
+
+  <!-- Script questions toggle -->
+  <script>
+    document.querySelectorAll('.faq').forEach(item => {
+      item.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+
+  <!-- tsParticles background -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+  <script>
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      background: { color: "#1c1c1c" },
+      particles: {
+        number: { value: 55 },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" }
+        },
+        opacity: { value: 0.5 },
+        size: { value: 5 },
+        move: {
+          enable: true,
+          speed: 1.2,
+          direction: "none",
+          outMode: "out"
+        }
+      },
+      detectRetina: true
+    });
+  </script>
+</body>
+</html>
