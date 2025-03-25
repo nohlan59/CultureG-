@@ -349,6 +349,7 @@
         </form>
     </section>
 
+    <!-- Questions et réponses -->
     <div class="faq"><h2>🍽️ Comment planifiez-vous les menus pour la semaine ?</h2><p class="chef-answer">🧑‍🍳 En concertation avec l’équipe de cuisine et avec Mme l'intendante Mme Arpin, nous équilibrons les repas tout en respectant les saisons.</p></div>
     <div class="faq"><h2>🌱 Quels critères utilisez-vous pour sélectionner les produits et les fournisseurs ?</h2><p class="chef-answer">🌱 Nous privilégions les produits locaux et de saison, en respectant les normes sanitaires et en négociant les meilleurs prix.</p></div>
     <div class="faq"><h2>💵 Quel est le budget moyen alloué par repas et par élève ?</h2><p class="chef-answer">💵 Le budget moyen par repas est de 3,95 € par élève, couvrant les coûts alimentaires, mais pas les charges de personnel ni l'entretien.</p></div>
@@ -396,6 +397,52 @@
         }
       },
       detectRetina: true
+    });
+  </script>
+
+  <!-- Webhook submission script -->
+  <script>
+    document.getElementById('suggestionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+  
+      const prenom = document.getElementById('prenom').value.trim();
+      const classe = document.getElementById('classe').value.trim();
+      const suggestion = document.getElementById('suggestion').value.trim();
+      const isAnon = document.getElementById('anonyme').checked;
+      const status = document.getElementById('formStatus');
+  
+      // 💡 Vérification personnalisée
+      if (!classe || !suggestion || (!isAnon && prenom === "")) {
+        status.textContent = "Merci de remplir tous les champs obligatoires.";
+        status.style.color = "orange";
+        return;
+      }
+  
+      const webhookURL = "https://discord.com/api/webhooks/1354125337579094087/KculE_e9J3UIrXFZoJLe3E2q6hs6Ia1vqZGsX4ARhQ6mOtfO0XORuAxfpfjUEpPQDZw0";
+  
+      let content = `📩 Nouvelle suggestion de la classe **${classe}**\n`;
+      content += isAnon
+        ? `🙈 **Suggestion anonyme :**\n${suggestion}`
+        : `👤 **${prenom}** propose :\n${suggestion}`;
+  
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+      })
+      .then(res => {
+        if (res.ok) {
+          status.textContent = "✅ Suggestion envoyée avec succès ! Merci 🙏";
+          status.style.color = "lightgreen";
+          document.getElementById('suggestionForm').reset();
+        } else {
+          throw new Error("Erreur lors de l’envoi.");
+        }
+      })
+      .catch(err => {
+        status.textContent = "❌ Une erreur est survenue. Réessaye plus tard.";
+        status.style.color = "red";
+      });
     });
   </script>
 </body>
